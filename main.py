@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 from time import sleep
 from ulauncher.api.client.Extension import Extension
 from ulauncher.api.client.EventListener import EventListener
@@ -25,15 +26,15 @@ class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
         items = []
 
-        raw_str = event.get_argument()
-        if raw_str is None or len(raw_str) == 0:
+        raw_str = re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", event.get_argument())
+        if raw_str is None or len(raw_str) == 1 or len(raw_str) == 0:
             return RenderResultListAction(items)
 
         keyword = event.get_keyword()
         if keyword == extension.preferences["kw_hex"]:
             items.append(ExtensionResultItem(icon='images/icon.png',
                                              name='Binary keyword',
-                                             description='This is a binary keyword',
+                                             description=raw_str[0]^raw_str[1],
                                              on_enter=ExtensionCustomAction('binary')))
 
         return RenderResultListAction(items)
