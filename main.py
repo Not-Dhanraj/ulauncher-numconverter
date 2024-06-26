@@ -30,7 +30,7 @@ class KeywordQueryEventListener(EventListener):
             return RenderResultListAction(items)
 
         keyword = event.get_keyword()
-        if keyword == extension.preferences["binary_kw"]:
+        if keyword == extension.preferences["kw_hex"]:
             items.append(ExtensionResultItem(icon='images/icon.png',
                                              name='Binary keyword',
                                              description='This is a binary keyword',
